@@ -59,15 +59,7 @@ class Keyboard(QWidget):
         space_button.setFixedSize(200, 40)
         self.gridLayout.addWidget(space_button, 4, 4, 1, 14)
 
-        self.setWindowTitle('QWERTY Keyboard')
-        self.resize(800, 300)  # Настройка размера окна
-        self.show()
 
     def key_pressed(self, key):
         print(f'Key {key} pressed')
 
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    ex = Keyboard()
-    sys.exit(app.exec_())
