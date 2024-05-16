@@ -6,7 +6,6 @@ from Input import Input
 
 
 class MainWindow(QMainWindow):
-
     def __init__(self):
         super().__init__()
         self.setWindowTitle("QuickKeys")
@@ -19,8 +18,7 @@ class MainWindow(QMainWindow):
         container.setLayout(main_layout)
         self.setCentralWidget(container)
 
-
-    
+       
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
