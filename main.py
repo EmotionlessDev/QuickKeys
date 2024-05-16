@@ -1,7 +1,8 @@
-import sys, os, csv
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QLineEdit, QVBoxLayout, QWidget, QGridLayout, QHBoxLayout, QLabel, QCheckBox, QRadioButton, QButtonGroup, QTableWidget, QTableWidgetItem, QFileDialog, QComboBox
-from PyQt5.QtGui import QFont
+import sys
+from PyQt5.QtWidgets import QApplication, QMainWindow, QGridLayout, QWidget
+from PyQt5.QtCore import Qt
 from Keyboard import Keyboard
+from Input import Input
 
 
 class MainWindow(QMainWindow):
@@ -10,15 +11,19 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("QuickKeys")
         keyboard = Keyboard()
-        main_layout = QVBoxLayout()
-        main_layout.addWidget(keyboard)
+        input = Input() 
+        main_layout = QGridLayout()
+        main_layout.addWidget(input, 0, 0)
+        main_layout.addWidget(keyboard, 1, 0, alignment=Qt.AlignCenter)
         container = QWidget()
         container.setLayout(main_layout)
         self.setCentralWidget(container)
+
+
+    
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MainWindow()
     window.show()
-
-    app.exec()
+    sys.exit(app.exec_()) 

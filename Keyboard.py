@@ -27,7 +27,7 @@ class Keyboard(QWidget):
 
         # Настройка размеров для каждой кнопки
         self.key_sizes = {
-            'Backspace': (80, 40),
+            'Backspace': (90, 40),
             'Tab': (60, 40),
             'Caps': (60, 40),
             'Enter': (80, 40),
