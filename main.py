@@ -11,14 +11,13 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("QuickKeys")
         keyboard = Keyboard()
         input = Input() 
+        input.input.textEdited.connect(keyboard.highlightButton)
         main_layout = QGridLayout()
         main_layout.addWidget(input, 0, 0)
         main_layout.addWidget(keyboard, 1, 0, alignment=Qt.AlignCenter)
         container = QWidget()
         container.setLayout(main_layout)
         self.setCentralWidget(container)
-
-       
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

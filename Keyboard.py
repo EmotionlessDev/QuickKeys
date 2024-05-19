@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QGridLayout, QVBoxLayout, QSizePolicy
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QTimer, QPropertyAnimation, QRect
 from PyQt5.QtCore import QSize
 
 class Keyboard(QWidget):
@@ -13,11 +13,9 @@ class Keyboard(QWidget):
         self.gridLayout = QGridLayout()
         layout.addLayout(self.gridLayout)
         self.setLayout(layout)
-
         # Настройка отступов и расстояния между виджетами
         self.gridLayout.setSpacing(0)  # Уменьшение расстояния между кнопками
         self.gridLayout.setContentsMargins(0, 0, 0, 0)  # Уменьшение отступов до минимума
-
         self.keys = [
             ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '←'],
             ['Tab', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '[', ']', '\\'],
@@ -38,6 +36,7 @@ class Keyboard(QWidget):
         }
 
         self.buttons = [] # списко для хранения кнопок
+        self.buttonsDict = {}
         # Добавление кнопок в сетку
         for row, key_row in enumerate(self.keys):
             col_offset = 0
@@ -61,9 +60,9 @@ class Keyboard(QWidget):
                     pass
                 else:
                     self.gridLayout.addWidget(button, row, col + col_offset)
-                # button.pressed.connect(lambda _, k=key: self.key_pressed(k))  # Подключаем сигнал clicked
-                # row_buttons.append(button)
+                self.buttonsDict[key] = [button, col]
             self.buttons.append(row_buttons)
+        
          
 
         space_button = QPushButton('Space')
@@ -77,21 +76,12 @@ class Keyboard(QWidget):
                 if col < len(self.buttons[row]):
                     self.buttons[row][col].setStyleSheet(self.get_button_style(self.keys[row][col], col))
 
-
-    # def keyPressEvent(self, event):
-    #     key = event.key()
-    #     print(key)
-       
     def get_button_style(self, key, col):
         base_style = """
             QPushButton {
                 border-radius: 4px;
                 font-size: 16px;
                 font-weight: 700;
-
-            }
-            QPushButton:pressed {
-                background-color: #dcdcdc;
             }
         """
         if key in ['←', 'Tab', 'Caps', 'Enter', 'Shift', 'Space']:
@@ -99,9 +89,6 @@ class Keyboard(QWidget):
                 QPushButton {
                     background-color: rgb(219,226,229);
                     font-weight: bold;
-                }
-                QPushButton:pressed {
-                    background-color: #a0a0a0;
                 }
             """
             return base_style + special_style
@@ -127,6 +114,17 @@ class Keyboard(QWidget):
             }
         """ 
             return base_style + odd_style
-        return base_style
-    def key_pressed(self, key):
-        print(f'Key {key} pressed')
+
+    def highlightButton(self, key):
+        if (len(key)):
+            key = key[-1]
+            key = key.upper()
+            if (key == ' '):
+                key = 'Space'
+            buttonCol = self.buttonsDict[key] 
+            button = buttonCol[0] 
+
+            col = buttonCol[1]
+            curStyle = self.get_button_style(key, col)
+            button.setStyleSheet(curStyle + "QPushButton {background-color: #70a322}")
+            QTimer.singleShot(500, lambda: button.setStyleSheet(curStyle)) 
