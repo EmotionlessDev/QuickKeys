@@ -7,7 +7,6 @@ from Keyboard import Keyboard
 from Englelvls import english_levels_2, english_levels_1
 
 class MainWindow(QMainWindow):
-
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Typing Trainer")
@@ -19,14 +18,13 @@ class MainWindow(QMainWindow):
 
 
         keyboard = Keyboard()
-
-        layout = QVBoxLayout()
-        layout.addWidget(self.display_text)
-        layout.addWidget(self.typing_filter)
-        layout.addWidget(keyboard)
-
+        input = Input() 
+        input.input.textEdited.connect(keyboard.highlightButton)
+        main_layout = QGridLayout()
+        main_layout.addWidget(input, 0, 0)
+        main_layout.addWidget(keyboard, 1, 0, alignment=Qt.AlignCenter)
         container = QWidget()
-        container.setLayout(layout)
+        container.setLayout(main_layout)
         self.setCentralWidget(container)
 
 if __name__ == "__main__":
