@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QGridLayout, QVBoxLayout, QSizePolicy, QLineEdit
-from PyQt5.QtCore import QSize
+from PyQt5.QtCore import QSize, Qt, QEvent
 
 
 class Input(QWidget):
@@ -12,10 +12,6 @@ class Input(QWidget):
     def initUI(self):
         layout = QVBoxLayout()
         self.setLayout(layout)
-        
         self.input = QLineEdit()
         layout.addWidget(self.input)
-        
-
-
 
