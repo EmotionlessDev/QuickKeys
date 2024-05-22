@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QGridLayout
+from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QGridLayout, QLabel
 from PyQt5.QtCore import Qt
 from window import TypingFilter
 from Text import DisplayText
@@ -19,12 +19,14 @@ class MainWindow(QMainWindow):
         # self.typing_filter.set_level_text(english_levels_1[0])
 
         keyboard = Keyboard()
-        input = Input() 
         textField = Textfield()
-        input.input.textEdited.connect(keyboard.highlightButton)
+        score_label = QLabel()
+        input = Input(textField, score_label) 
+        input.textEdited.connect(keyboard.highlightButton)
         main_layout = QGridLayout()
         # main_layout.addWidget(self.display_text, 0, 0)
         # main_layout.addWidget(self.typing_filter, 1, 0)
+        main_layout.addWidget(score_label, 0, 0)
         main_layout.addWidget(textField, 1, 0)
         main_layout.addWidget(input, 2, 0)
         main_layout.addWidget(keyboard, 3, 0, alignment=Qt.AlignCenter)
