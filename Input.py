@@ -1,17 +1,31 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QGridLayout, QVBoxLayout, QSizePolicy, QLineEdit
-from PyQt5.QtCore import QSize, Qt, QEvent
+from PyQt5.QtCore import QSize, Qt, QEvent, ws
+from Textfield import Textfield
 
 
-class Input(QWidget):
+class Input(QLineEdit):
 
-    def __init__(self):
+    def __init__(self, textField, score_label):
         super().__init__()
-        self.initUI()
+        self.textfield = textField
+        self.score_label = score_label
+        self.textChanged.connect(self.checkInput)
+        self.current_word_start = 0
+        self.correct_words = 0
 
-    def initUI(self):
-        layout = QVBoxLayout()
-        self.setLayout(layout)
-        self.input = QLineEdit()
-        layout.addWidget(self.input)
-
+    def checkInput(self):
+        input_text = self.text()
+        if input_text and input_text[-1].isspace():
+            word = input_text.strip()
+            if word:
+                cur_word = self.textfield.original_text.split(" ")[0]  # Get the first word
+                print(cur_word)
+                if word == cur_word:
+                    self.correct_words += 1
+                    self.score_label.setText(f"Correct Words: {self.correct_words}")
+                # Remove the first word and update text
+                remaining_text = ' '.join(self.textfield.original_text.split(' ')[1:])
+                self.textfield.original_text = remaining_text
+                self.textfield.updateText(0)
+            self.setText("")
