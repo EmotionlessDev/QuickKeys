@@ -29,3 +29,9 @@ class Input(QLineEdit):
                 self.textfield.original_text = remaining_text
                 self.textfield.updateText(0)
             self.setText("")
+
+    def reset(self):
+        self.correct_words = 0
+        self.current_word_start = 0
+        self.score_label.setText(f"Correct Words: {self.correct_words}")
+        self.textfield.genText()

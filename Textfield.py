@@ -1,4 +1,5 @@
 import sys
+import random
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QGridLayout, QVBoxLayout, QSizePolicy, QLineEdit
 from PyQt5.QtCore import Qt, QTimer, QPropertyAnimation, QRect
 from PyQt5.QtCore import QSize
@@ -11,6 +12,7 @@ class Textfield(QLineEdit):
 
     def initUI(self):
         self.setReadOnly(True)
+        self.words = "the be to of and a in that have I it for not on with he as you do at this but his by from they we say her she or an will my one all would there their what so up out if about who get which go me when make can like time no just him know take people into year your good some could them see other than then now look only come its over think also back after use two how our work first well way even new want because any these give day most us"
         self.setText("the be to of and a in that have I it for not on with he as you do at this but his by from they we say her she or an will my one all would there their what so up out if about who get which go me when make can like time no just him know take people into year your good some could them see other than then now look only come its over think also back after use two how our work first well way even new want because any these give day most us")
         self.setCursorPosition(0)
         self.correct_format = QTextCharFormat()
@@ -23,3 +25,12 @@ class Textfield(QLineEdit):
     def updateText(self, start):
         self.setText(self.original_text[start:])
         self.setCursorPosition(0)
+    
+    def genText(self):
+        words = self.words.split()
+
+        start_index = random.randint(0, len(words))  # Случайно выбираем начальный индекс
+        selected_words = ' '.join(words[start_index:start_index+100])  # Выбираем 100 слов
+        self.setText(selected_words)  # Устанавливаем сгенерированный текст
+        self.original_text = self.text()
+        self.setCursorPosition(0)  # Устанавливаем позицию курсора в начало
