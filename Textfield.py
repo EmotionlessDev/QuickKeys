@@ -28,9 +28,10 @@ class Textfield(QLineEdit):
     
     def genText(self):
         words = self.words.split()
-
-        start_index = random.randint(0, len(words))  # Случайно выбираем начальный индекс
-        selected_words = ' '.join(words[start_index:start_index+100])  # Выбираем 100 слов
-        self.setText(selected_words)  # Устанавливаем сгенерированный текст
+        selected_words = ""
+        for i in range(100):
+            index = random.randint(0, len(words) - 1)
+            selected_words += words[index] + ' '  # Добавляем слово к selected_words
+        self.setText(selected_words.strip())  # Устанавливаем сгенерированный текст
         self.original_text = self.text()
         self.setCursorPosition(0)  # Устанавливаем позицию курсора в начало
