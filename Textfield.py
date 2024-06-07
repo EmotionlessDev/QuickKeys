@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QGridLayout, QVB
 from PyQt5.QtCore import Qt, QTimer, QPropertyAnimation, QRect
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QColor, QTextCursor, QTextCharFormat
+from DataBase import Database
 
 class Textfield(QLineEdit):
     def __init__(self): 
@@ -16,12 +17,20 @@ class Textfield(QLineEdit):
         self.setText(self.words) 
         self.setCursorPosition(0)
         self.original_text = self.text()
+        self.text_source = 'database'
 
-    def updateText(self, start):
+    def update_text(self, start):
         self.setText(self.original_text[start:])
         self.setCursorPosition(0)
-    
-    def genText(self):
+
+    def gen_text(self):
+        if self.text_source == 'random':
+            self.generate_random_text()
+        elif self.text_source == 'database':
+            self.load_text_from_db()
+
+    def generate_random_text(self):
+        """Генерация случайного текста"""
         words = self.words.split()
         selected_words = ""
         for i in range(400):
@@ -30,3 +39,20 @@ class Textfield(QLineEdit):
         self.setText(selected_words.strip())  # Устанавливаем сгенерированный текст
         self.original_text = self.text()
         self.setCursorPosition(0)  # Устанавливаем позицию курсора в начало
+
+    def load_text_from_db(self):
+        db = Database('bd.db')  # Создаем экземпляр класса Database с именем вашей базы данных
+        texts = db.fetch_data('typing_exercises')
+        db.close()
+
+        if texts:
+            random_text = random.choice(texts)  # Выбираем случайный текст из полученных
+            self.setText(random_text[1])
+            self.original_text = self.text()
+            self.setCursorPosition(0)
+
+    def set_text_source(self, source):
+        if source in ['random', 'database']:
+            self.text_source = source
+        else:
+            raise ValueError("Source must be either 'random' or 'database'")

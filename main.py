@@ -53,7 +53,7 @@ class MainWindow(QMainWindow):
 
     def updateSpeedLabel(self):
         if self.input_started:
-            cur_t = 60 - self.current_time.second() 
+            cur_t = 60 - self.current_time.second()
             print(str(cur_t) + " " + str(self.input.getCorrectLetters()))
             if cur_t != 0:
                 cur_speed = self.input.getCorrectLetters() * 60 / cur_t
@@ -82,7 +82,6 @@ class MainWindow(QMainWindow):
         self.input_started = False
         self.updateChildTimer()
         print(self.speed_label.text())
-        
 
     def updateChildTimer(self):
         # Обновляем текущее время и выводим его на QLabel
