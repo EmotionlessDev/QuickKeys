@@ -28,7 +28,7 @@ class Input(QLineEdit):
                 # Remove the first word and update text
                 remaining_text = ' '.join(self.textfield.original_text.split(' ')[1:])
                 self.textfield.original_text = remaining_text
-                self.textfield.updateText(0)
+                self.textfield.update_text(0)
             self.setText("")
 
     def getCorrectWords(self):
@@ -42,4 +42,4 @@ class Input(QLineEdit):
         self.correct_letters = 0
         self.current_word_start = 0
         self.score_label.setText(f"Correct Words: {self.correct_words}")
-        self.textfield.genText()
+        self.textfield.gen_text()
