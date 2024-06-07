@@ -1,10 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QGridLayout, QLabel, QPushButton
-from PyQt5.QtCore import Qt, QTimer, QTime, ws
-from window import TypingFilter
-from Text import DisplayText
+from PyQt5.QtCore import Qt, QTimer, QTime
 from Keyboard import Keyboard
-from Englelvls import english_levels_2, english_levels_1
 from Input import Input
 from Textfield import Textfield
 
@@ -55,12 +52,14 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(container)
 
     def updateSpeedLabel(self):
-        cur_t = self.current_time.minute() * 60 + self.current_time.second() 
-        if cur_t != 0:
-            cur_speed = self.input.getCorrectLetters() * 60 / cur_t
-        else:
-            cur_speed = 0
-        self.speed_label.setText(str(cur_speed) + " CPM")
+        if self.input_started:
+            cur_t = 60 - self.current_time.second() 
+            print(str(cur_t) + " " + str(self.input.getCorrectLetters()))
+            if cur_t != 0:
+                cur_speed = self.input.getCorrectLetters() * 60 / cur_t
+            else:
+                cur_speed = 0
+            self.speed_label.setText(str(cur_speed) + " CPM")
 
     def reset(self):
         self.input.reset()
@@ -82,7 +81,7 @@ class MainWindow(QMainWindow):
         self.child_timer.stop()  # Останавливаем дочерний таймер
         self.input_started = False
         self.updateChildTimer()
-        print("Time's up!")
+        print(self.speed_label.text())
         
 
     def updateChildTimer(self):
