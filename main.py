@@ -1,10 +1,11 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QDialog
 from PyQt5.QtCore import Qt
 from Keyboard import Keyboard
 from Textfield import Textfield
 from TypingSession import TypingSession
 from MainLayout import MainLayout
+from UserDialog import UserDialog
 
 
 class MainWindow(QMainWindow):
@@ -12,6 +13,13 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("Typing Trainer")
 
+        user_dialog = UserDialog(self)
+        if user_dialog.exec_() == QDialog.Accepted:
+            self.init_ui()
+        else:
+            sys.exit()  # Закрываем приложение, если пользователь не вошел
+
+    def init_ui(self):
         # Инициализация виджетов
         keyboard = Keyboard()
         textField = Textfield()
@@ -19,6 +27,10 @@ class MainWindow(QMainWindow):
         self.timer_label = QLabel()
         self.speed_label = QLabel("0 CPM")
         self.reload_button = QPushButton("Restart")
+
+        # Кнопка регистрации пользователя
+        self.register_button = QPushButton("Register User")
+        self.register_button.clicked.connect(self.show_registration_dialog)
 
         # Создаем и инициализируем TypingSession
         self.typing_session = TypingSession(
@@ -43,7 +55,12 @@ class MainWindow(QMainWindow):
             keyboard=keyboard
         )
 
-        self.setCentralWidget(main_layout.create_layout())
+        container = main_layout.create_layout()
+        self.setCentralWidget(container)
+
+    def show_registration_dialog(self):
+        dialog = UserDialog(self)
+        dialog.exec_()  # Открываем диалоговое окно регистрации
 
     def endSession(self):
         """Вызывается при завершении таймерной сессии"""
