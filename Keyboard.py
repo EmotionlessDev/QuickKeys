@@ -127,4 +127,4 @@ class Keyboard(QWidget):
             col = buttonCol[1]
             curStyle = self.get_button_style(key, col)
             button.setStyleSheet(curStyle + "QPushButton {background-color: #70a322}")
-            QTimer.singleShot(500, lambda: button.setStyleSheet(curStyle)) 
+            QTimer.singleShot(100, lambda: button.setStyleSheet(curStyle)) 
