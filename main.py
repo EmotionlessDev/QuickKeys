@@ -6,6 +6,7 @@ from Textfield import Textfield
 from TypingSession import TypingSession
 from MainLayout import MainLayout
 from UserDialog import UserDialog
+import qdarkgraystyle
 
 
 class MainWindow(QMainWindow):
@@ -69,6 +70,7 @@ class MainWindow(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    app.setStyleSheet(qdarkgraystyle.load_stylesheet())
     window = MainWindow()
     window.show()
     sys.exit(app.exec_())

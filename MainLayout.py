@@ -25,7 +25,7 @@ class MainLayout:
         main_layout.addWidget(self.timer_label, 0, 3)
         main_layout.addWidget(self.textField, 1, 0, 1, 4)
         main_layout.addWidget(self.input, 2, 0, 1, 4)
-        main_layout.addWidget(self.keyboard, 3, 0, alignment=Qt.AlignCenter)
+        main_layout.addWidget(self.keyboard, 3, 2, alignment=Qt.AlignCenter)
 
         container = QWidget()
         container.setLayout(main_layout)

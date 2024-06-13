@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QGridLayout, QVBoxLayout, QSizePolicy
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QGridLayout, QVBoxLayout, QSizePolicy, QHBoxLayout
 from PyQt5.QtCore import Qt, QTimer, QPropertyAnimation, QRect
 from PyQt5.QtCore import QSize
 
@@ -9,10 +9,18 @@ class Keyboard(QWidget):
         self.initUI()
 
     def initUI(self):
-        layout = QVBoxLayout()
+        # Главный вертикальный layout, чтобы центровать по вертикали
+        vbox = QVBoxLayout()
+        vbox.addStretch(1)  # Добовляем пружину для центрирования
+
+        # Горизонтальный layout для центровки по горизонтали
+        hbox = QHBoxLayout()
+        hbox.addStretch(1)  # Пружина слева
+
+        # layout = QVBoxLayout()
         self.gridLayout = QGridLayout()
-        layout.addLayout(self.gridLayout)
-        self.setLayout(layout)
+        # layout.addLayout(self.gridLayout)
+        # self.setLayout(layout)
         # Настройка отступов и расстояния между виджетами
         self.gridLayout.setSpacing(0)  # Уменьшение расстояния между кнопками
         self.gridLayout.setContentsMargins(0, 0, 0, 0)  # Уменьшение отступов до минимума
@@ -75,6 +83,15 @@ class Keyboard(QWidget):
             for row in range(len(self.buttons)):
                 if col < len(self.buttons[row]):
                     self.buttons[row][col].setStyleSheet(self.get_button_style(self.keys[row][col], col))
+        # Добавляем основной layout клавиатуры в горизонтальный layout
+        hbox.addLayout(self.gridLayout)
+        hbox.addStretch(1)  # Пружина справа
+
+        # Добавляем горизонтальный layout в вертикальный layout
+        vbox.addLayout(hbox)
+        vbox.addStretch(1)  # Пружина снизу
+
+        self.setLayout(vbox)  # Устанавливаем главный layout
 
     def get_button_style(self, key, col):
         base_style = """
