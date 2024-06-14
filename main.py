@@ -15,7 +15,9 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Typing Trainer")
 
         user_dialog = UserDialog(self)
+        self.user_id = None
         if user_dialog.exec_() == QDialog.Accepted:
+            self.user_id = user_dialog.current_user_id
             self.init_ui()
         else:
             sys.exit()  # Закрываем приложение, если пользователь не вошел
