@@ -37,9 +37,16 @@ class Input(QLineEdit):
     def getCorrectLetters(self):
         return self.correct_letters
 
+    def block(self):
+        self.setReadOnly(True)
+
+    def unblock(self):
+        self.setReadOnly(False)
+
     def reset(self):
         self.correct_words = 0
         self.correct_letters = 0
         self.current_word_start = 0
+        self.setText("")
         self.score_label.setText(f"Correct Words: {self.correct_words}")
         self.textfield.gen_text()

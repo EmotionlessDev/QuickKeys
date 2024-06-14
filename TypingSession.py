@@ -36,6 +36,7 @@ class TypingSession:
 
     def resetSession(self):
         self.input.reset()
+        self.input.unblock()
         self.typing_timer.reset()  # Сброс таймера
         self.input_started = False
 
@@ -45,7 +46,9 @@ class TypingSession:
             self.typing_timer.start()
 
     def endSession(self):
+        self.callback_end()  # Вызываем callback по окончании сессии
+        self.input.reset()
+        self.input.block()
         self.input_started = False
         self.typing_timer.stop()
         self.updateSpeedLabel()  # Обновляем метку скорости в конце сессии
-        self.callback_end()  # Вызываем callback по окончании сессии
