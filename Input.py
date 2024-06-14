@@ -14,6 +14,7 @@ class Input(QLineEdit):
         self.current_word_start = 0
         self.correct_words = 0
         self.correct_letters = 0
+        self.errors = 0
 
     def checkInput(self):
         input_text = self.text()
@@ -25,6 +26,8 @@ class Input(QLineEdit):
                     self.correct_words += 1
                     self.correct_letters += len(cur_word)
                     self.score_label.setText(f"Correct Words: {self.correct_words}")
+                else:
+                    self.errors += 1
                 # Remove the first word and update text
                 remaining_text = ' '.join(self.textfield.original_text.split(' ')[1:])
                 self.textfield.original_text = remaining_text
@@ -37,6 +40,9 @@ class Input(QLineEdit):
     def getCorrectLetters(self):
         return self.correct_letters
 
+    def getErrors(self):
+        return self.errors
+
     def block(self):
         self.setReadOnly(True)
 
@@ -47,6 +53,7 @@ class Input(QLineEdit):
         self.correct_words = 0
         self.correct_letters = 0
         self.current_word_start = 0
+        self.errors = 0
         self.setText("")
         self.score_label.setText(f"Correct Words: {self.correct_words}")
         self.textfield.gen_text()
