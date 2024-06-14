@@ -1,13 +1,12 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QDialog
-from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QDialog, QVBoxLayout, QWidget
 from Keyboard import Keyboard
+from DataBase import Database
 from Textfield import Textfield
 from TypingSession import TypingSession
 from MainLayout import MainLayout
 from UserDialog import UserDialog
 import qdarkgraystyle
-
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -33,6 +32,12 @@ class MainWindow(QMainWindow):
         self.register_button = QPushButton("Register User")
         self.register_button.clicked.connect(self.show_registration_dialog)
 
+        # Add buttons to select text level
+        self.level_one_button = QPushButton("Level 1")
+        self.level_two_button = QPushButton("Level 2")
+        self.level_one_button.clicked.connect(lambda: self.set_text_level(1))
+        self.level_two_button.clicked.connect(lambda: self.set_text_level(2))
+
         # Создаем и инициализируем TypingSession
         self.typing_session = TypingSession(
             textfield=textField,
@@ -57,7 +62,13 @@ class MainWindow(QMainWindow):
         )
 
         container = main_layout.create_layout()
-        self.setCentralWidget(container)
+        layout = QVBoxLayout()
+        layout.addWidget(self.level_one_button)
+        layout.addWidget(self.level_two_button)
+        layout.addWidget(container)
+        central_widget = QWidget()
+        central_widget.setLayout(layout)
+        self.setCentralWidget(central_widget)
 
     def show_registration_dialog(self):
         dialog = UserDialog(self)
@@ -67,6 +78,9 @@ class MainWindow(QMainWindow):
         """Вызывается при завершении таймерной сессии"""
         print(self.speed_label.text())
 
+    def set_text_level(self, level):
+        self.typing_session.textfield.set_level(level)
+        self.typing_session.textfield.gen_text()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

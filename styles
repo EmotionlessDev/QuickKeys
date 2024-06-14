@@ -1,0 +1,13 @@
+QPushButton#btn {
+    background: #ffc43d;
+    color: #fff;
+    border: 2px solid #2b2b2b;
+    border-radius: 100px;
+    padding: 5px 10px;
+    transition: background 2000ms, color 150ms;  /* Рабочие transition */
+}
+
+QPushButton#btn:hover {
+    background:transparent;
+    color: #ffc43d;
+}
