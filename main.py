@@ -31,6 +31,7 @@ class MainWindow(QMainWindow):
         self.timer_label = QLabel()
         self.speed_label = QLabel("0 CPM")
         self.reload_button = QPushButton("Restart")
+        self.mode_button = QPushButton("random")
 
         # Кнопка регистрации пользователя
         self.register_button = QPushButton("Register User")
@@ -43,6 +44,7 @@ class MainWindow(QMainWindow):
             timer_label=self.timer_label,
             speed_label=self.speed_label,
             reset_button=self.reload_button,
+            mode_button=self.mode_button,
             callback_end=self.endSession
         )
 
@@ -57,6 +59,7 @@ class MainWindow(QMainWindow):
             speed_label=self.speed_label,
             score_label=self.score_label,
             reload_button=self.reload_button,
+            mode_button=self.mode_button,
             timer_label=self.timer_label,
             textField=textField,
             input=self.typing_session.input,

@@ -7,7 +7,8 @@ from StatisticsManager import StatisticsManager
 
 
 class TypingSession:
-    def __init__(self, user_id, textfield: Textfield, timer_label: QLabel, speed_label: QLabel, reset_button: QPushButton,
+    def __init__(self, user_id, textfield: Textfield, timer_label: QLabel, speed_label: QLabel,
+                 reset_button: QPushButton, mode_button: QPushButton,
                  callback_end):
         self.user_id = user_id
         self.textfield = textfield
@@ -15,6 +16,7 @@ class TypingSession:
         self.speed_label = speed_label
         self.speed = 0
         self.reset_button = reset_button
+        self.mode_button = mode_button
         self.callback_end = callback_end
         self.statistic = StatisticsManager()
 
@@ -28,11 +30,13 @@ class TypingSession:
         self.input.textChanged.connect(self.startTimer)
         self.typing_timer.child_timer.timeout.connect(self.updateSpeedLabel)
         self.reset_button.clicked.connect(self.resetSession)
+        self.mode_button.clicked.connect(self.changeMode)
 
     def updateSpeedLabel(self):
         if self.input_started:
             # Определяем прошедшее время с момента начала ввода
-            elapsed_time = (self.typing_timer.initial_milliseconds - self.typing_timer.remaining_time) / 1000  # в секундах
+            elapsed_time = (
+                                       self.typing_timer.initial_milliseconds - self.typing_timer.remaining_time) / 1000  # в секундах
             if elapsed_time > 0:
                 # Получаем количество правильно введенных символов
                 correct_letters = self.input.getCorrectLetters()
@@ -56,10 +60,18 @@ class TypingSession:
             self.typing_timer.start()
 
     def endSession(self):
-        self.statistic.record_statistics(self.user_id, int(self.speed), int(self.speed/4), self.input.errors)
+        self.statistic.record_statistics(self.user_id, int(self.speed), int(self.speed / 4), self.input.errors)
         self.callback_end()  # Вызываем callback по окончании сессии
         self.input.reset()
         self.input.block()
         self.input_started = False
         self.typing_timer.stop()
         self.updateSpeedLabel()  # Обновляем метку скорости в конце сессии
+
+    def changeMode(self):
+        if self.mode_button.text() == "random":
+            self.mode_button.setText("quote")
+            self.textfield.set_text_source("quote")
+        else:
+            self.mode_button.setText("random")
+            self.textfield.set_text_source("random")
