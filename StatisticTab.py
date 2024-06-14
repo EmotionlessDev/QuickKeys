@@ -1,7 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QListWidget
 from StatisticsManager import StatisticsManager
 from WpmChartWindow import WpmChartWindow
-import sip
 
 
 class StatisticsTab(QWidget):
@@ -25,16 +24,20 @@ class StatisticsTab(QWidget):
 
         self.setLayout(self.layout)
 
+    # to do: Обновлять данные в графике, вместо того, чтобы создавать его заново
     def load_statistics(self):
         user_id = self.user_id
         stats = self.statistics_manager.fetch_statistics(user_id)
 
         wpm_data = []
+        self.stats_list.clear()
+        id = 1
         for record in stats:
             cpm, wpm, errors, timestamp = record
             wpm_data.append(int(wpm))
-            stat_entry = f"CPM: {cpm}, WPM: {wpm}, Errors: {errors}, Time: {timestamp}"
+            stat_entry = f"ID: {id} \t CPM: {int(cpm)} \t WPM: {int(wpm)} \t Errors: {errors} \t Time: {timestamp}"
             self.stats_list.addItem(stat_entry)
+            id += 1
         self.layout.removeWidget(self.chart)
         self.chart = WpmChartWindow(wpm_data)
         self.layout.addWidget(self.chart)
