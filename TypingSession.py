@@ -18,7 +18,7 @@ class TypingSession:
         self.input = Input(textfield, self.score_label)
 
         # Инициализация таймера для сессии
-        self.typing_timer = TypingTimer(self.timer_label, self.endSession)
+        self.typing_timer = TypingTimer(self.timer_label, self.endSession, 30000)
 
         self.input_started = False
         self.input.textChanged.connect(self.startTimer)
@@ -27,12 +27,17 @@ class TypingSession:
 
     def updateSpeedLabel(self):
         if self.input_started:
-            cur_t = 60 - self.typing_timer.current_time.second()
-            if cur_t != 0:
-                cur_speed = self.input.getCorrectLetters() * 60 / cur_t
+            # Определяем прошедшее время с момента начала ввода
+            elapsed_time = (self.typing_timer.initial_milliseconds - self.typing_timer.remaining_time) / 1000  # в секундах
+            if elapsed_time > 0:
+                # Получаем количество правильно введенных символов
+                correct_letters = self.input.getCorrectLetters()
+                # Рассчитываем скорость ввода в символах в минуту (CPM)
+                cur_speed = (correct_letters * 60) / elapsed_time
+                # Обновляем метку скорости
+                self.speed_label.setText(f"{cur_speed:.2f} CPM")
             else:
-                cur_speed = 0
-            self.speed_label.setText(f"{cur_speed:.2f} CPM")
+                self.speed_label.setText("0.00 CPM")  # Если время еще не прошло, показываем 0 CPM
 
     def resetSession(self):
         self.input.reset()
