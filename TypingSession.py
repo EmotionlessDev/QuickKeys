@@ -22,7 +22,7 @@ class TypingSession:
 
         self.input_started = False
         self.input.textChanged.connect(self.startTimer)
-        self.input.textChanged.connect(self.updateSpeedLabel)
+        self.typing_timer.child_timer.timeout.connect(self.updateSpeedLabel)
         self.reset_button.clicked.connect(self.resetSession)
 
     def updateSpeedLabel(self):
