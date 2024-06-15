@@ -7,7 +7,7 @@ from PyQt5.QtGui import QColor, QTextCursor, QTextCharFormat
 from DataBase import Database
 
 class Textfield(QLineEdit):
-    def __init__(self): 
+    def __init__(self):
         super().__init__()
         self.initUI()
 
@@ -17,7 +17,7 @@ class Textfield(QLineEdit):
         self.setText(self.words) 
         self.setCursorPosition(0)
         self.original_text = self.text()
-        self.text_source = 'database'
+        self.text_source = 'quote'
 
     def update_text(self, start):
         self.setText(self.original_text[start:])
@@ -26,7 +26,7 @@ class Textfield(QLineEdit):
     def gen_text(self):
         if self.text_source == 'random':
             self.generate_random_text()
-        elif self.text_source == 'database':
+        elif self.text_source == 'quote':
             self.load_text_from_db()
 
     def generate_random_text(self):
@@ -52,7 +52,7 @@ class Textfield(QLineEdit):
             self.setCursorPosition(0)
 
     def set_text_source(self, source):
-        if source in ['random', 'database']:
+        if source in ['random', 'quote']:
             self.text_source = source
         else:
-            raise ValueError("Source must be either 'random' or 'database'")
+            raise ValueError("Source must be either 'random' or 'quote'")

@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox, QFormLayout, QTabWidget, \
-    QWidget
-from DataBase import Database
+from PyQt5.QtWidgets import QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox, QFormLayout, QTabWidget, QWidget
+from DataBase import Database  # Предполагается, что этот класс уже реализован
+import sqlite3
 
 
 class UserDialog(QDialog):
@@ -23,6 +23,9 @@ class UserDialog(QDialog):
         main_layout = QVBoxLayout()
         main_layout.addWidget(self.tabs)
         self.setLayout(main_layout)
+
+        # Подключение к базе данных bd.db и создание таблицы users, если она еще не существует
+        self.initialize_database()
 
     def create_login_tab(self):
         """Создает вкладку для входа"""
@@ -67,11 +70,12 @@ class UserDialog(QDialog):
             QMessageBox.warning(self, "Input Error", "Both fields are required!")
             return
 
-        db = Database("users.db")  # Используем отдельную базу данных для пользователей
+        db = Database("bd.db")  # Используем существующую базу данных bd.db
         try:
-            db.cursor.execute("SELECT password FROM users WHERE username = ?", (username,))
+            db.cursor.execute("SELECT id, password FROM users WHERE username = ?", (username,))
             result = db.cursor.fetchone()
-            if result and result[0] == password:
+            if result and result[1] == password:
+                self.current_user_id = result[0]  # Сохранение id текущего пользователя
                 QMessageBox.information(self, "Success", "Login successful!")
                 self.accept()
             else:
@@ -90,10 +94,14 @@ class UserDialog(QDialog):
             QMessageBox.warning(self, "Input Error", "Both fields are required!")
             return
 
-        db = Database("users.db")  # Используем отдельную базу данных для пользователей
+        db = Database("bd.db")  # Используем существующую базу данных bd.db
         try:
-            db.create_table("users", "username TEXT PRIMARY KEY, password TEXT")
-            db.insert_data("users", (username, password))
+            # Создание таблицы users с автоинкрементируемым id, если она еще не существует
+            db.create_table("users", "id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE, password TEXT")
+
+            # Попытка вставить нового пользователя
+            db.insert_data("users", (None, username, password))  # None используется для автоинкрементируемого id
+
             QMessageBox.information(self, "Success", "User registered successfully!")
             self.accept()
         except sqlite3.IntegrityError:
@@ -112,3 +120,13 @@ class UserDialog(QDialog):
             event.accept()
         else:
             event.ignore()
+
+    def initialize_database(self):
+        """Создает таблицу users, если она еще не существует"""
+        db = Database("bd.db")
+        try:
+            db.create_table("users", "id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE, password TEXT")
+        except Exception as e:
+            QMessageBox.critical(self, "Database Error", str(e))
+        finally:
+            db.close()
