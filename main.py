@@ -19,7 +19,6 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("QuickKeys")
         self.setWindowIcon(QtGui.QIcon('logo.png'))
-
         user_dialog = UserDialog(self)
         self.user_id = None
         if user_dialog.exec_() == QDialog.Accepted:
