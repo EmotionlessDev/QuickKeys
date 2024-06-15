@@ -1,6 +1,10 @@
 import sys
+
+from PyQt5 import QtGui
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QDialog, QTabWidget
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QIcon
+
 from Keyboard import Keyboard
 from StatisticTab import StatisticsTab
 from Textfield import Textfield
@@ -13,7 +17,8 @@ import qdarkgraystyle
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Typing Trainer")
+        self.setWindowTitle("QuickKeys")
+        self.setWindowIcon(QtGui.QIcon('logo.png'))
 
         user_dialog = UserDialog(self)
         self.user_id = None
