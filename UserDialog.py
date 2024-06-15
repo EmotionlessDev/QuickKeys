@@ -89,7 +89,7 @@ class UserDialog(QDialog):
         """Обрабатывает регистрацию нового пользователя"""
         username = self.register_username_input.text()
         password = self.register_password_input.text()
-
+        self.current_user_id = username
         if not username or not password:
             QMessageBox.warning(self, "Input Error", "Both fields are required!")
             return
